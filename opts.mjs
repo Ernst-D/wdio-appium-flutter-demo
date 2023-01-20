@@ -5,7 +5,7 @@ const osSpecificOps =
         'appium:deviceName': 'Pixel 4',
         "appium:platformVersion": "13",
         // @todo support non-unix style path
-        'appium:app': "/Users/ernst/Documents/prog/appium-flutter/app-debug.apk" // download local to run faster and save bandwith
+        'appium:app': "./android-real-debug.apk" // download local to run faster and save bandwith
         // app: 'https://github.com/truongsinh/appium-flutter-driver/releases/download/v0.0.4/android-real-debug.apk',
       }
     : process.env.APPIUM_OS === 'ios'
