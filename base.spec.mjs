@@ -1,8 +1,9 @@
 import { byValueKey } from 'appium-flutter-finder';
-import { afterAll, beforeAll, suite, expect, test } from 'vitest'
+import { suite, expect, test, beforeEach, afterEach } from 'vitest'
 import { remote } from 'webdriverio';
 import opts from './opts.mjs';
 import { validateElementPosition } from './utils.mjs';
+import fs from "fs/promises";
 
 suite('basic', async () => {
     /**
@@ -10,15 +11,15 @@ suite('basic', async () => {
      */
     let driver;
 
-    beforeAll(async () => {
+    beforeEach(async () => {
         driver = await remote(opts);
     })
 
-    afterAll(async () => {
+    afterEach(async () => {
         await driver.deleteSession();
     })
 
-    test('basic flutter test', async () => {
+    test('call flutter commands', async () => {
         const counterTextFinder = byValueKey('counter');
         const buttonFinder = byValueKey('increment');
 
@@ -34,6 +35,23 @@ suite('basic', async () => {
         );
 
         expect(renderObjectDiagnostics.type).toStrictEqual('DiagnosticableTreeNode');
-        expect(renderObjectDiagnostics.children.length).toStrictEqual(1)
+        expect(renderObjectDiagnostics.children.length).toStrictEqual(1);
+
+        const semanticsId = await driver.execute(
+            'flutter:getSemanticsId',
+            counterTextFinder
+        );
+        expect(semanticsId).toStrictEqual(4);
+    })
+
+    test("get render tree", async () => {
+        const treeString = await driver.execute('flutter: getRenderTree');
+        await fs.writeFile("./render-tree.txt", treeString);
+        expect(treeString.substr(0, 11)).toStrictEqual('RenderView#');
+
+        await driver.switchContext('NATIVE_APP');
+        await driver.saveScreenshot('./native-screenshot.png');
+        await driver.switchContext('FLUTTER');
+        await driver.saveScreenshot('./flutter-screenshot.png');
     })
 })
