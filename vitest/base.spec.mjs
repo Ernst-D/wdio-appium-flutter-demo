@@ -46,7 +46,7 @@ suite('basic', async () => {
 
     test("get render tree", async () => {
         const treeString = await driver.execute('flutter: getRenderTree');
-        await fs.writeFile("./render-tree.txt", treeString);
+        await fs.writeFile(`./${opts.capabilities['appium:platformName']}-render-tree.txt`, treeString);
         expect(treeString.substr(0, 11)).toStrictEqual('RenderView#');
 
         await driver.switchContext('NATIVE_APP');

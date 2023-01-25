@@ -6,7 +6,7 @@
   "scripts": {
     "test": "vitest run",
     "appium": "npx appium",
-    "wdio": "wdio run ./wdio.conf.js"
+    "wdio": "wdio run ./wdio/wdio.conf.js"
   },
   "keywords": [],
   "author": "",
